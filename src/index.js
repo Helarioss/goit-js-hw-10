@@ -26,6 +26,8 @@ function onSearch(event) {
 }
 
 function onCountryClick(event) {
+  event.preventDefault();
+
   const countryRef = event.target;
   if (countryRef.className != 'country-link') {
     return;
@@ -42,25 +44,28 @@ function onCountryClick(event) {
 }
 
 function onEscClick(event) {
-  if (event.code !== 'Escape') return;
-
-  renderCountry(countriesArray);
-  window.removeEventListener('keydown', onEscClick);
+  if (event.code === 'Escape') {
+    renderCountry(countriesArray);
+  }
 }
 
 function renderCountry(countries) {
+  window.removeEventListener('keydown', onEscClick);
+
   if (countries.length > 10) {
     Notify.info('Too many matches found. Please enter a more specific name.');
     return;
   }
+
   if (countries.length === 1) {
     refs.countryList.innerHTML = '';
     refs.countryInfo.innerHTML = createCountryInfoMarkup(countries[0]);
-  } else {
-    refs.countryInfo.innerHTML = '';
-    refs.countryList.innerHTML = createCountryListMarkup(countries);
-    countriesArray = countries;
+    return;
   }
+
+  refs.countryInfo.innerHTML = '';
+  refs.countryList.innerHTML = createCountryListMarkup(countries);
+  countriesArray = countries;
 }
 
 function createCountryInfoMarkup({ name, capital, languages, population, flags: { svg: flag } }) {
@@ -77,7 +82,7 @@ function createCountryListMarkup(countries) {
   return countries
     .map(({ flags, name }) => {
       return `<li class="country-item">
-                <a class="country-link">
+                <a class="country-link" href="">
                   <img class="country-flag" src="${flags.svg}" alt="${name}'s flag"></img>
                   <h2 class="country-name">${name.official}</h2>
                 </a>

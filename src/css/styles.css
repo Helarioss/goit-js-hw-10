@@ -40,8 +40,11 @@ img {
 }
 
 .country-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+
+  color: inherit;
+  text-decoration: none;
 }
 
 .country-link:hover {
